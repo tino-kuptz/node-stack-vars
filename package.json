@@ -4,6 +4,11 @@
   "description": "A Node.js module for creating stack-like variable contexts using AsyncLocalStorage",
   "main": "lib/index.js",
   "type": "module",
+  "files": [
+    "lib/",
+    "package.json",
+    "README.md"
+  ],
   "scripts": {
     "test": "mocha",
     "test:watch": "mocha --watch"
