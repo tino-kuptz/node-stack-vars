@@ -1,0 +1,24 @@
+{
+    "name": "stack-vars-express-advanced-example",
+    "version": "1.0.0",
+    "description": "Advanced Express web server example demonstrating stack-vars across multiple files",
+    "main": "server.js",
+    "type": "module",
+    "scripts": {
+        "start": "node server.js",
+        "dev": "node --watch server.js"
+    },
+    "dependencies": {
+        "express": "^4.18.2",
+        "stack-vars": "file:../../"
+    },
+    "keywords": [
+        "stack-vars",
+        "express",
+        "async-hooks",
+        "context",
+        "modular"
+    ],
+    "author": "Tino Kuptz",
+    "license": "MIT"
+}

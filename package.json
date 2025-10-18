@@ -1,0 +1,34 @@
+{
+  "name": "stack-vars",
+  "version": "0.1.0",
+  "description": "A Node.js module for creating stack-like variable contexts using AsyncLocalStorage",
+  "main": "lib/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "mocha",
+    "test:watch": "mocha --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tino-kuptz/node-stack-vars.git"
+  },
+  "keywords": [
+    "node",
+    "context",
+    "async-local-storage",
+    "async-hooks",
+    "request-tracing",
+    "logging"
+  ],
+  "author": "Tino Kuptz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tino-kuptz/node-stack-vars/issues"
+  },
+  "homepage": "https://github.com/tino-kuptz/node-stack-vars#readme",
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "chai": "^4.3.7",
+    "esm": "^3.2.25"
+  }
+}

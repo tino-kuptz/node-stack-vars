@@ -1,0 +1,7 @@
+{
+  "loader": "esm",
+  "timeout": 5000,
+  "recursive": true,
+  "extensions": ["js"],
+  "spec": "test/**/*.test.js"
+}
