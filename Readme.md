@@ -1,5 +1,47 @@
 # stack-vars
 A Node.js module for creating stack-like variable contexts using async hooks. Store and retrieve variables across async boundaries with full control over inheritance behavior.
+## What does this do?
+### Explained
+stack-vars solves the common Node.js problem of sharing data across asynchronous code without manually passing variables through every function call.
+
+It lets you store variables in a stack-like execution context that automatically follows async/await, Promises, timers, and callbacks. Once a value is set, it is available everywhere inside the same async flow, even deep inside nested operations.
+
+Each async execution gets its own isolated context, so data does not leak between requests or tasks. You can also create multiple named contexts to keep different kinds of data separate (for example: request data, user data, or auth data).
+
+This makes stack-vars ideal for request IDs, logging, user context, tracing, and other per-request state. It is built on Node.js Async Local Storage and has (except for unit testing) zero dependencies.
+
+Works with node.js >= 13
+### Demonstrated
+Imagine the following code:
+```js
+app.get('...', (req, resp) => {
+  const user = getUserFromRequest(req);
+  if(user == null) throw new Error('...');
+  var book = getQuery(event);
+  // if(typeof book == "undefined") etc
+  book = Book.loadById(book.id)
+  // if book not found etc
+  if(book.canBeAccessedByUser(user.id)) throw new Error('...')
+  book.isRead = true
+  book.update({ updated_by: user.id })
+});
+```
+You haver to pass the user object to every function call.
+
+Now imagine loading user in a middleware and instead using the following:
+```js
+app.get('...', (req, resp) => {
+  if(!stackVars('user')?.uuid) throw new Error('...')
+  var book = getQuery(event);
+  // if(typeof book == "undefined") etc
+  book = Book.loadById(book.id) // <-- can also access stackVars('user')
+  // and check itself if permissions are there
+  book.isRead = true
+  book.update() // <-- can access stackVars('user') to get
+  // the calling user
+});
+```
+In this example you wrapped your whole endpoint in `stackVars.init(() => /**/)` and dont have to validate everything again passing the user object to every function call, but always know which user actually called the endpoint.
 ## Installation
 ```bash
 npm install stack-vars
@@ -35,8 +77,8 @@ It can also create different contexts with different names:
 // Creates "default"
 stackVars.init(() => {
     stackVars.init('user', () => {
-        stackVars().id = 15; // dets for "default"
-        stackVars('user').id = 15; // sets for "user"
+        stackVars().id = 15; // sets for context named "default"
+        stackVars('user').id = 15; // sets for context named "user"
     })
 })
 ```
@@ -46,13 +88,22 @@ It is stable since node.js V13
 ## Basic Usage
 ### Setting and Getting Variables
 ```js
-
+stackVars('request').uuid = uuidv4()
+stackVars('request').uuid // "a7ca1a84-8310-4823-8ec3-c6e91fa97b42"
 ```
 ### Named Contexts
 Create multiple isolated contexts within the same execution:
 
 ```js
-
+stackVars.init(() => {
+  // has stackVars() - equal to stackVars("default")
+})
+stackVars.init("user", () => {
+  // has stackVars("user")
+})
+stackVars.init(["user", "session"], () => {
+  // has stackVars("user") and stackVars("session")
+})
 ```
 ## API Reference
 ### `stackVars.init()`
